@@ -20,6 +20,12 @@
 #pragma once
 
 #define _POSIX_C_SOURCE 199309L /* try removing this if build fails */
+#ifdef __APPLE__
+/* Ensure BSD typedefs (u_int, u_char, etc.) are visible on macOS */
+#ifndef _DARWIN_C_SOURCE
+#define _DARWIN_C_SOURCE 1
+#endif
+#endif
 
 #include <stdbool.h>
 #include <stddef.h>
