@@ -125,7 +125,7 @@ static void lbp2900_job_prologue(struct printer_state_s *state)
 {
 	(void) state;
 	uint8_t buf[8];
-	size_t size;
+	size_t size = sizeof(buf);
 
 	capt_sendrecv(CAPT_IDENT, NULL, 0, NULL, 0);
 	sleep(1);
@@ -136,7 +136,7 @@ static void lbp2900_job_prologue(struct printer_state_s *state)
 	capt_sendrecv(CAPT_JOB_BEGIN, magicbuf_0, ARRAY_SIZE(magicbuf_0), buf, &size);
 	job=WORD(buf[2], buf[3]);
 
-	capt_sendrecv(CAPT_GPIO, lbp3010_gpio_init, ARRAY_SIZE(lbp3010_gpio_init), NULL, 0);
+	capt_sendrecv(CAPT_GPIO, lbp2900_gpio_init, ARRAY_SIZE(lbp2900_gpio_init), NULL, 0);
 	lbp2900_wait_ready(state->ops);
 
 	send_job_start(1, 0);
@@ -147,7 +147,7 @@ static void lbp3000_job_prologue(struct printer_state_s *state)
 {
 	(void) state;
 	uint8_t buf[8];
-	size_t size;
+	size_t size = sizeof(buf);
 
 	capt_sendrecv(CAPT_IDENT, NULL, 0, NULL, 0);
 	sleep(1);
@@ -175,7 +175,7 @@ static void lbp3010_job_prologue(struct printer_state_s *state)
 {
 	(void) state;
 	uint8_t buf[8];
-	size_t size;
+	size_t size = sizeof(buf);
 
 	capt_sendrecv(CAPT_IDENT, NULL, 0, NULL, 0);
 	sleep(1);
@@ -197,7 +197,7 @@ static void lbp6000_job_prologue(struct printer_state_s *state)
 {
 	(void) state;
 	uint8_t buf[8];
-	size_t size;
+	size_t size = sizeof(buf);
 
 	capt_sendrecv(CAPT_IDENT, NULL, 0, NULL, 0);
 	sleep(1);
@@ -480,8 +480,8 @@ static struct lbp2900_ops_s lbp2900_ops = {
 		.init = lbp2900_gpio_init,
 		.blink = lbp2900_gpio_blink,
 	},
-	.get_status = capt_get_xstatus,
-	.wait_ready = capt_wait_ready,
+	.get_status = capt_get_xstatus_only,
+	.wait_ready = capt_wait_xready_only,
 };
 register_printer("LBP2900", lbp2900_ops.ops, WORKS);
 
